@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,9 +8,7 @@ Route::get('/', function () {
     return view('pages/home');
 })->name('home');
 
-Route::get('/meetings', function () {
-    return view('pages/meetings');
-})->name('meetings.index');
+Route::get('/meetings', [MeetingController::class, 'index'])->name('meetings.index');
 
 Route::post('/savemember', [MemberController::class, 'store'])->name('member.store'); 
 

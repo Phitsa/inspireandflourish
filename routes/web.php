@@ -10,6 +10,10 @@ Route::get('/', function () {
 
 Route::get('/meetings', [MeetingController::class, 'index'])->name('meetings.index');
 
+Route::post('/meetings/save', [MeetingController::class, 'store'])->name('meeting.store');
+
+Route::put('/meetings/update', [MeetingController::class, 'update'])->name('meeting.update');
+
 Route::post('/savemember', [MemberController::class, 'store'])->name('member.store'); 
 
 Route::get('/members', [MemberController::class, 'index'])->name('pages.members'); 

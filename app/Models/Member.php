@@ -14,4 +14,9 @@ class Member extends Model
         'isVisitor',
         'personGender'
     ];
+
+    public function meetings()
+    {
+        return $this->belongsToMany(Meeting::class, 'meeting_member');
+    }
 }

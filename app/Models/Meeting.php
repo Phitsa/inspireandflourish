@@ -10,9 +10,13 @@ class Meeting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'date',
-        'members',
+        'meeting_name',
+        'meeting_date',
         'description',
     ];
+
+    public function members()
+    {   
+        return $this->belongsToMany(Member::class, 'meeting_member', 'meeting_id', 'member_id');
+    }
 }

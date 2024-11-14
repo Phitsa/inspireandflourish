@@ -14,16 +14,16 @@
     </h1>
     <ul class="text-white">
       <li class="m-2">
-        <a 
-        href="/" 
+        <a
+        href="/"
         @class([
         'p-2 block w-full rounded-md hover:bg-sky-500',
         'bg-sky-500' => request()->is('/')
         ])>Home</a>
       </li>
       <li class="m-2">
-        <a 
-        href="/meetings" 
+        <a
+        href="/meetings"
         @class([
         'p-2 block w-full rounded-md hover:bg-sky-500',
         'bg-sky-500' => request()->is("meetings")
@@ -31,8 +31,8 @@
         >Meetings</a>
       </li>
       <li class="m-2">
-        <a 
-        href="/members" 
+        <a
+        href="/members"
         @class([
         'p-2 block w-full rounded-md hover:bg-sky-500',
         'bg-sky-500' => request()->is('members', 'member/*/edit')

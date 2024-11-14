@@ -8,12 +8,19 @@
 
   <h2 class="text-3xl font-semibold">Meetings</h2>
 
-  <button id="openModalMeetings" class="bg-sky-500 rounded p-3 text-white">ADD Meeting</button>
+  <button modal-name="registerMeetingForm" class="bg-sky-500 rounded p-3 text-white" onclick="openModal(this)">ADD Meeting</button>
 </section>
 <hr class="mx-8 border-1 border-black"/>
 
-<section class="h-full w-full overflow-x-auto">
-  <div class="relative grid grid-cols-5 grid-rows-3 gap-4 h-fit p-8">
+<section class="flex flex-col h-full w-full overflow-auto justify-between">
+  <div class="mx-8 my-4">
+    <ul class="flex text-gray-600">
+      <li class="">
+        Meetings Quantity: {{$totalMeetings}}
+      </li>
+    </ul>
+  </div>
+  <div class="grid grid-cols-4 grid-rows-2 flex-grow gap-4 mx-8">
     @foreach ($meetings as $meeting)
       <div class="w-full h-full p-2 rounded-lg border-4 flex flex-col justify-between">
         <div>
@@ -22,39 +29,52 @@
           @if ($meeting->description)
             <h2><strong>Description:</strong> {{$meeting->description}}</h2>
           @endif
+          <h4><strong>Membros:</strong></h4>
+        <ul>
+          @foreach ($meeting->members->take(5) as $member)
+              <li>{{ $member->name }}</li>
+          @endforeach
+        </ul>
         </div>
         <div class="py-2 flex justify-end gap-2">
+          <button data-meeting-members="
+          @foreach ($meeting->members as $member)
+            {{$member->name}},
+          @endforeach" onclick="showMembers(this)" class="bg-teal-500 hover:bg-teal-600 w-20 p-2 rounded-md text-white transition duration-200">Members</button>
+
           <button
-          class="editButton bg-blue-500 hover:bg-blue-600 w-20 p-2 rounded-md text-white transition duration-200"
+          class="bg-blue-500 hover:bg-blue-600 w-20 p-2 rounded-md text-white transition duration-200"
           data-meeting-id="{{$meeting->id}}"
           data-meeting-name="{{$meeting->meeting_name}}"
           data-meeting-date="{{$meeting->meeting_date}}"
           data-meeting-desc="{{$meeting->description}}"
+          onclick="openEditModal(this)"
           >Edit</button>
+
           <button
           class="deleteButton bg-red-500 hover:bg-red-600 w-20 p-2 rounded-md text-white transition duration-200"
-          data-meeting-id="{{$meeting->id}}"
-          data-meeting-name="{{$meeting->meeting_name}}"
-          data-meeting-date="{{$meeting->meeting_date}}"
-          data-meeting-desc="{{$meeting->description}}"
+          flash="{{$meeting->id}}"
+          modal-name="deleteMeetingModal"
+          onclick="openModal(this)"
           >Remove</button>
         </div>
       </div>
     @endforeach
+    <div class="col-span-4 mb-4">
+      {{ $meetings->links() }}
+    </div>
   </div>
 
-  <div class="mx-8 mb-10 bg-gray-200">
-    {{ $meetings->links() }}
-  </div>
+
 
 </section>
 
-<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="registerMeetingForm">
-  <form class="bg-white rounded-lg w-1/4 p-6 grid grid-cols-2" id="closeModalMeetings" method="POST" action="meetings/save" autocomplete="off">
+<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="registerMeetingForm" onclick="closeModal(this)">
+  <form class="bg-white rounded-md w-1/4 p-6 grid grid-cols-2" id="closeModalMeetings" method="POST" action="meetings/save" autocomplete="off" onclick="event.stopPropagation()">
     @csrf
     <div class="col-span-2 flex justify-between items-center mb-4">
       <h1 class="text-2xl">Add Meeting</h1>
-      <button  onclick="closesvg()">
+      <button onclick="closesvg(this)">
         <svg xmlns="http://www.w3.org/2000/svg" id="closeMeetingModal" class="size-6 cursor-pointer" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0EA5E9" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
       </button>
     </div>
@@ -83,13 +103,13 @@
   </form>
 </section>
 
-<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="editMeetingForm">
-  <form class="bg-white rounded-lg w-1/4 p-6 grid grid-cols-2" id="closeEditModalMeetings" method="POST" action="meetings/update" autocomplete="off">
+<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="editMeetingForm" onclick="closeModal(this)">
+  <form class="bg-white rounded-md w-1/4 p-6 grid grid-cols-2" id="closeEditModalMeetings" method="POST" action="meetings/update" autocomplete="off" onclick="event.stopPropagation()">
     @csrf
     @method('PUT')
     <div class="col-span-2 flex justify-between items-center mb-4">
       <h1 class="text-2xl">Edit Meeting</h1>
-      <button  onclick="closeeditsvg()">
+      <button type="button" onclick="closesvg(this)">
         <svg xmlns="http://www.w3.org/2000/svg" id="closeMeetingModal" class="size-6 cursor-pointer" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0EA5E9" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
       </button>
     </div>
@@ -104,11 +124,6 @@
 
     <div class="col-span-2 mb-2">
       <label class="col-span-2" for="meetingMembers">Meeting Members</label>
-      @if ($errors->has('meetingMembers'))
-        <div class="text-red-500 text-sm">
-            {{ $errors->first('meetingMembers') }}
-        </div>
-      @endif
       <select name="meetingMembers[]" id="membersEditSelect" class="rounded-lg border-2 col-span-2" multiple id="" required>
         @foreach ($members as $member)
             <option value="{{$member->id}}">{{$member->name}}</option>
@@ -125,62 +140,105 @@
   </form>
 </section>
 
-{{-- <dialog open id="errorDialog" class="inset-0 h-fit w-80 bg-red-600 text-white p-4 rounded-md flex flex-col">
-  <div class="flex justify-between mb-2 items-center">
-    <p id="errorMessage" class="text-center text-lg">A error ocurred</p>
-    <svg xmlns="http://www.w3.org/2000/svg" id="closeMeetingModal" class="size-6 cursor-pointer" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0EA5E9" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
-  </div>
-  <p class="col-span-2">{{Error}}</p>
-</dialog> --}}
+<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="showMembersModal" onclick="closeModal(this)">
+	<div class="bg-white rounded-md p-4" onclick="event.stopPropagation()">
+		<div class="col-span-2 flex justify-between gap-8 items-center mb-4">
+			<h1 class="text-2xl">Meeting Members</h1>
+			<button onclick="closesvg(this)">
+				<svg xmlns="http://www.w3.org/2000/svg" id="closeMeetingModal" class="size-6 cursor-pointer" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0EA5E9" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
+			</button>
+		</div>
+		<div>
+			<ol class="list-inside list-decimal" id="membersList">
+
+			</ol>
+		</div>
+	</div>
+</section>
+
+<section class="invisible fixed inset-0 flex flex-col justify-center items-center bg-gray-500 bg-opacity-50" id="deleteMeetingModal" onclick="closeModal(this)">
+  <form method="POST" class="bg-white rounded-md p-4 w-1/4" onclick="event.stopPropagation()" action="meeting/delete">
+    @csrf
+    @method('DELETE')
+
+    <input type="hidden" name="flash" value="">
+
+    <div class="col-span-2 flex justify-between gap-8 items-center mb-4">
+      <h1 class="text-2xl">Delete Meeting?</h1>
+      <button type="button" onclick="closesvg(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" id="closeMeetingModal" class="size-6 cursor-pointer" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0EA5E9" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
+      </button>
+    </div>
+    <div>
+      <p id="deleteModelTitle" class="text-gray-600 mb-3">This action cannot be undone. Once confirmed, all data for this meeting will be permanently deleted.</p>
+    </div>
+    <div class="flex justify-center">
+      <input
+      type="submit"
+      value="Delete"
+      class="bg-red-500 text-white border w-20 rounded cursor-pointer py-2 px-1 transition duration-300 ease-in-out hover:scale-105 focus:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+      />
+    </div>
+  </form>
+</section>
 
 <script>
 
-  const openModalMeetings = document.getElementById('openModalMeetings')
-  const registerMeetingForm = document.getElementById('registerMeetingForm')
-  const closeMeetingModal = document.getElementById('closeMeetingModal')
+  function openModal(button) {
+    const modalId = button.getAttribute('modal-name');
+    const modalName = document.getElementById(modalId);
+    const flash = button.getAttribute('flash');
 
-  const closeEditModalMeetings = document.getElementById('closeEditModalMeetings')
-  const editMeetingForm = document.getElementById('editMeetingForm')
-  const closeSvgMeetingModal = document.getElementById('closeSvgMeetingModal')
-
-  openModalMeetings.addEventListener('click', function() {
-    registerMeetingForm.style.visibility = 'visible';
-  })
-
-  registerMeetingForm.addEventListener('click', function(event) {
-    if(event.target === registerMeetingForm) {
-      registerMeetingForm.style.visibility = 'hidden';
-    }
-  });
-
-  document.querySelectorAll('.editButton').forEach(button => {
-    button.addEventListener('click', function() {
-      const id = this.getAttribute('data-meeting-id');
-      const name = this.getAttribute('data-meeting-name');
-      const date = this.getAttribute('data-meeting-date');
-      const desc = this.getAttribute('data-meeting-desc');
-
-      document.querySelector('input[name="meetingEditId"]').value = id;
-      document.querySelector('input[name="meetingEditName"]').value = name;
-      document.querySelector('input[name="meetingEditDate"]').value = date;
-      document.querySelector('textarea[name="meetingEditDesc"]').value = desc;
-
-      document.getElementById('editMeetingForm').style.visibility = 'visible';
-    });
-  });
-
-  editMeetingForm.addEventListener('click', function(event) {
-    if(event.target === editMeetingForm) {
-      editMeetingForm.style.visibility = 'hidden';
-    }
-  });
-
-  function closesvg() {
-    registerMeetingForm.style.visibility = 'hidden';
+    document.querySelector('input[name="flash"]').value = flash;
+    modalName.style.visibility = 'visible';
   }
 
-  function closeeditsvg() {
-    editMeetingForm.style.visibility = 'hidden';
+  function closesvg(button) {
+    const grandparent = button.parentElement.parentElement;
+    grandparent.parentElement.style.visibility = 'hidden';
+  }
+
+  function closeModal(modal) {
+    modal.style.visibility = 'hidden';
+  }
+
+  function openDeleteModal(button) {
+    const id = button.getAttribute('data-meeting-id');
+    const name = button.getAttribute('data-meeting-name');
+    const date = button.getAttribute('data-meeting-date');
+    const desc = button.getAttribute('data-meeting-desc');
+  }
+
+  function openEditModal(button) {
+    const id = button.getAttribute('data-meeting-id');
+    const name = button.getAttribute('data-meeting-name');
+    const date = button.getAttribute('data-meeting-date');
+    const desc = button.getAttribute('data-meeting-desc');
+
+    document.querySelector('input[name="meetingEditId"]').value = id;
+    document.querySelector('input[name="meetingEditName"]').value = name;
+    document.querySelector('input[name="meetingEditDate"]').value = date;
+    document.querySelector('textarea[name="meetingEditDesc"]').value = desc;
+
+    document.getElementById('editMeetingForm').style.visibility = 'visible';
+  }
+
+  function showMembers(button) {
+
+  const members = button.getAttribute('data-meeting-members');
+  const memberList = members.split(',').map(member => member.trim()).filter(member => member !== '');
+  const showMembersModal = document.getElementById('showMembersModal');
+  const membersContainer = document.getElementById('membersList');
+
+  membersContainer.innerHTML = '';
+
+  memberList.forEach(function(member) {
+      const listItem = document.createElement('li');
+      listItem.textContent = member.trim();
+      membersContainer.appendChild(listItem);
+  });
+
+  showMembersModal.style.visibility = 'visible';
   }
 
 </script>

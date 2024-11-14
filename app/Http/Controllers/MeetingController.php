@@ -11,8 +11,9 @@ class MeetingController extends Controller
     public function index()
     {
         $members  = Member::all();
-        $meetings = Meeting::paginate(10);
-        return view('pages.meetings', compact('members', 'meetings'));
+        $meetings = Meeting::with('members')->paginate(8);
+        $totalMeetings = Meeting::count();
+        return view('pages.meetings', compact('members', 'meetings', 'totalMeetings'));
     }
 
     public function store(Request $request)
@@ -43,7 +44,6 @@ class MeetingController extends Controller
 
     public function update(Request $request)
     {
-
         $validatedData = $request->validate([
             'meetingEditName' => 'required|string|max:255',
             'meetingEditDate' => 'required|date|date_format:Y-m-d',
@@ -62,5 +62,13 @@ class MeetingController extends Controller
         $meeting->members()->sync($validatedData['meetingMembers']);
         return redirect('meetings');
 
+    }
+
+    public function delete()
+    {
+        $meeting = Meeting::findOrFail(request('flash'));
+        $meeting->delete();
+
+        return redirect('meetings');
     }
 }

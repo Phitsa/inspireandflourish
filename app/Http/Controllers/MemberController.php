@@ -16,8 +16,8 @@ class MemberController extends Controller
         return view('pages.members', compact('members', 'totalMembers', 'visitorsQuantity'));
     }
 
-    public function store() 
-    {   
+    public function store()
+    {
 
         $isVisitor = request()->has('isVisitor') ? 1 : 0;
 
@@ -43,11 +43,10 @@ class MemberController extends Controller
         return redirect('members');
     }
 
-    public function delete(Request $request)
+    public function delete()
     {
-        $member = Member::findOrFail(request('deleteId'));
+        $member = Member::findOrFail(request('deletedId'));
         $member->delete();
-
-        return redirect()->route('pages.members')->with('success', 'Member deleted successfully');
+        return redirect('members');
     }
 }

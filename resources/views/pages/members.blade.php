@@ -66,7 +66,7 @@
     </table>
   </div>
 
-  <div class="mx-8 mb-10"> 
+  <div class="mx-8 mb-10">
     {{ $members->links() }}
   </div>
 </section>
@@ -92,7 +92,7 @@
         <option value="Male">Male</option>
         <option value="Female">Female</option>
       </select>
-        
+
       <label class="inline-flex items-center cursor-pointer my-2">
         <input type="checkbox" value="" name="isVisitor" class="sr-only peer ">
         <div id="toggleTransition" class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -101,7 +101,7 @@
     </div>
 
     <div class="flex justify-center">
-      <input 
+      <input
       type="submit"
       value="Save"
       class="bg-sky-500 text-white border w-20 rounded cursor-pointer py-2 px-1"
@@ -136,18 +136,18 @@
         <option value="Male">Male</option>
         <option value="Female">Female</option>
       </select>
-        
+
       <label class="inline-flex items-center cursor-pointer my-2">
         <input type="checkbox" value="" name="editIsVisitor" class="sr-only peer ">
         <div id="editToggleTransition" class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
         <span class="ms-3 text-sm font-medium text-gray-900">Is a Visitor?</span>
       </label>
     </div>
-    
+
 
 
     <div class="flex justify-center">
-      <input 
+      <input
       type="submit"
       value="Save"
       class="bg-sky-500 text-white border w-20 rounded cursor-pointer py-2 px-1"
@@ -171,10 +171,10 @@
     </div>
     <p id="deleteModelTitle" class="text-gray-600 mb-3">This action cannot be undone. Once confirmed, all data for [Member's Name] will be permanently deleted.</p>
 
-    <input type="hidden" name="deleteId" value="">
+    <input type="hidden" name="deletedId" value="">
 
     <div class="flex justify-center">
-      <input 
+      <input
       type="submit"
       value="Delete"
       class="bg-red-500 text-white border w-20 rounded cursor-pointer py-2 px-1 transition duration-300 ease-in-out hover:scale-105 focus:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
@@ -196,7 +196,7 @@
       const name = this.getAttribute('data-member-name');
       const personGender = this.getAttribute('data-member-gender');
       const isVisitor = this.getAttribute('data-member-isVisitor');
-  
+
       document.querySelector('input[name="editId"]').value = id
       document.querySelector('input[name="editName"]').value = name;
       document.querySelector('select[name="editPersonGender"]').value = personGender;
@@ -214,7 +214,7 @@
 
       document.getElementById('DeleteMemberForm').style.visibility = 'visible';
 
-      document.querySelector('input[name="deleteId"]').value = memberId;
+      document.querySelector('input[name="deletedId"]').value = memberId;
 
       document.getElementById('deleteModelTitle').textContent = `This action cannot be undone. Once confirmed, all data for ${memberName} will be permanently deleted.`;
     });

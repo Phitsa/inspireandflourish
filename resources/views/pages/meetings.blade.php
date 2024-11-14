@@ -13,54 +13,67 @@
 <hr class="mx-8 border-1 border-black"/>
 
 <section class="flex flex-col h-full w-full overflow-auto justify-between">
-  <div class="mx-8 my-4">
+  <div class="m-10">
     <ul class="flex text-gray-600">
       <li class="">
         Meetings Quantity: {{$totalMeetings}}
       </li>
     </ul>
   </div>
-  <div class="grid grid-cols-4 grid-rows-2 flex-grow gap-4 mx-8">
+  <div class="grid grid-cols-4 grid-rows-2 flex-grow gap-4 mx-8 mb-10">
     @foreach ($meetings as $meeting)
-      <div class="w-full h-full p-2 rounded-lg border-4 flex flex-col justify-between">
-        <div>
-          <h1 class="font-bold">{{$meeting->meeting_name}}</h1>
-          <p><strong>Date:</strong> {{$meeting->meeting_date}}</p>
-          @if ($meeting->description)
-            <h2><strong>Description:</strong> {{$meeting->description}}</h2>
-          @endif
-          <h4><strong>Membros:</strong></h4>
-        <ul>
-          @foreach ($meeting->members->take(5) as $member)
-              <li>{{ $member->name }}</li>
-          @endforeach
+      <div class="w-full h-full p-4 rounded-lg border border-gray-300 shadow-lg flex flex-col justify-between bg-white">
+    <div class="mb-4">
+        <h1 class="text-xl font-bold text-gray-800 mb-2">{{$meeting->meeting_name}}</h1>
+        <p class="text-gray-600"><strong>Date:</strong> {{$meeting->meeting_date}}</p>
+
+        @if ($meeting->description)
+        <p class="text-gray-700 mt-2"><strong>Description:</strong> {{$meeting->description}}</p>
+        @endif
+
+        <h4 class="text-gray-800 font-semibold mt-4">Membros:</h4>
+        <ul class="list-disc pl-6 mt-2 text-gray-600">
+        @foreach ($meeting->members->take(4) as $member)
+            <li>{{ $member->name }}</li>
+        @endforeach
         </ul>
-        </div>
-        <div class="py-2 flex justify-end gap-2">
-          <button data-meeting-members="
-          @foreach ($meeting->members as $member)
-            {{$member->name}},
-          @endforeach" onclick="showMembers(this)" class="bg-teal-500 hover:bg-teal-600 w-20 p-2 rounded-md text-white transition duration-200">Members</button>
+    </div>
 
-          <button
-          class="bg-blue-500 hover:bg-blue-600 w-20 p-2 rounded-md text-white transition duration-200"
-          data-meeting-id="{{$meeting->id}}"
-          data-meeting-name="{{$meeting->meeting_name}}"
-          data-meeting-date="{{$meeting->meeting_date}}"
-          data-meeting-desc="{{$meeting->description}}"
-          onclick="openEditModal(this)"
-          >Edit</button>
+    <div class="flex justify-end gap-3">
+      <button data-meeting-members="
+      @foreach ($meeting->members as $member)
+          {{$member->name}},
+      @endforeach"
+      onclick="showMembers(this)"
+      class="bg-teal-500 hover:bg-teal-600 w-24 py-2 rounded-md text-white font-medium transition duration-200 shadow-sm"
+      >
+      Members
+      </button>
 
-          <button
-          class="deleteButton bg-red-500 hover:bg-red-600 w-20 p-2 rounded-md text-white transition duration-200"
-          flash="{{$meeting->id}}"
-          modal-name="deleteMeetingModal"
-          onclick="openModal(this)"
-          >Remove</button>
-        </div>
+      <button
+      class="bg-blue-500 hover:bg-blue-600 w-24 py-2 rounded-md text-white font-medium transition duration-200 shadow-sm"
+      data-meeting-id="{{$meeting->id}}"
+      data-meeting-name="{{$meeting->meeting_name}}"
+      data-meeting-date="{{$meeting->meeting_date}}"
+      data-meeting-desc="{{$meeting->description}}"
+      onclick="openEditModal(this)"
+      >
+      Edit
+      </button>
+
+      <button
+      class="deleteButton bg-red-500 hover:bg-red-600 w-24 py-2 rounded-md text-white font-medium transition duration-200 shadow-sm"
+      flash="{{$meeting->id}}"
+      modal-name="deleteMeetingModal"
+      onclick="openModal(this)"
+      >
+      Remove
+      </button>
       </div>
-    @endforeach
-    <div class="col-span-4 mb-4">
+      </div>
+
+      @endforeach
+      <div class="col-span-4">
       {{ $meetings->links() }}
     </div>
   </div>

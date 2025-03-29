@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,3 +18,5 @@ Route::post('/savemember', [MemberController::class, 'store'])->name('member.sto
 Route::get('/members', [MemberController::class, 'index'])->name('pages.members');
 Route::put('/member/update', [MemberController::class, 'update'])->name('pages.updateMember');
 Route::delete('/member/delete', [MemberController::class, 'delete'])->name('member.delete');
+
+Route::get('/login', [UserController::class, 'index'])->name('pages.login');

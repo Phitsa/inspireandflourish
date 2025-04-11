@@ -8,7 +8,7 @@
 
   <h2 class="text-3xl font-semibold">Home</h2>
 
-  <button modal-name="registerMeetingForm" class="bg-sky-500 rounded p-3 text-white" onclick="openModal(this)">Get Info</button>
+  <button modal-name="registerMeetingForm" class="bg-purple-500 rounded p-3 text-white" onclick="openModal(this)">Get Info</button>
 </section>
 <hr class="mx-8 border-1 border-black"/>
 

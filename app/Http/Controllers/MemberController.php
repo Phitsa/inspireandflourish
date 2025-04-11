@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class MemberController extends Controller
 {
@@ -13,7 +14,9 @@ class MemberController extends Controller
         $members = Member::paginate(10);
         $totalMembers = Member::count();
         $visitorsQuantity = Member::where('isVisitor', true)->count();
-        return view('pages.members', compact('members', 'totalMembers', 'visitorsQuantity'));
+        $columns = ['nome','genero', 'visitante', 'data', 'ações'];
+        $tableColumns = ['name', 'personGender', 'isVisitor', 'created_at', 'id'];
+        return view('pages.members', compact('members', 'totalMembers', 'visitorsQuantity', 'columns', 'tableColumns'));
     }
 
     public function store()
